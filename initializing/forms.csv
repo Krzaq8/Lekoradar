@@ -3,134 +3,107 @@
 1,"aerozol do nosa, roztwór"
 2,"aerozol do nosa, zawiesina"
 3,"aerozol inh., roztwór"
-4,"aerozol inhalacyjny, roztwór"
-5,"aerozol inhalacyjny, zawiesina"
-6,"aerozol podjęzykowy, roztwór"
-7,"aerozol wziewny, roztwór"
-8,"aerozol wziewny, zawiesina"
-9,czopki
-10,granulat do sporządzania roztworu doustnego
-11,granulat do sporządzania zawiesiny doustnej
-12,granulat musujący
-13,granulat o przedłużonym uwalnianiu
-14,implant
-15,implant podskórny
-16,implant w amp.-strz.
-17,implant w amp.-strzyk.
-18,kaps.
-19,kaps. dojel.
-20,kaps. dojel. twarde
-21,kaps. dojelitowe twarde
-22,"kaps. dojelitowe, twarde"
-23,kaps. elastyczne
-24,kaps. miękkie
-25,kaps. o przedł. uwalnianiu twarde
-26,kaps. o przedłużonym uwalnianiu
-27,"kaps. o przedłużonym uwalnianiu, twarde"
-28,kaps. o zmodyfikowanym uwalnianiu
-29,"kaps. o zmodyfikowanym uwalnianiu, twarde"
-30,kaps. twarde
-31,kaps. twarde o zmodyfikowanym uwalnianiu
-32,kaps.miękkie
-33,kapsułki
-34,"kapsułki dojelitowe, twarde"
-35,kapsułki o przedłużonym uwalnianiu
-36,"kapsułki o przedłużonym uwalnianiu, twarde"
-37,"kapsułki o zmodyfikowanym uwalnianiu, twarde, kaps. o zmodyfikowanym uwalnianiu, twarde"
-38,kapsułki twarde
-39,koncentrat do sporządzania roztworu do infuzji
-40,krem
-41,krople do oczu
-42,"krople do oczu, roztwór"
-43,"krople do oczu, roztwór w pojemniku jednodawkowym"
-44,"krople do oczu, zawiesina"
-45,krople doustne
-46,"krople doustne, roztwór"
-47,"liofilizat do sporządzania roztworu do wstrzykiwań, infuzji i inhalacji"
-48,liofilizat doustny
-49,maść
-50,"mikrowlewka doodbytnicza, roztwór"
-51,piana na skórę
-52,proszek do inhalacji
-53,proszek do inhalacji w kaps. twardej
-54,proszek do inhalacji w kaps. twardych
-55,proszek do inhalacji w kapsułce twardej
-56,proszek do inhalacji w kapsułkach twardych
-57,"proszek do inhalacji, podzielony"
-58,proszek do sporządzania roztworu do wstrzykiwań
-59,proszek do sporządzania roztworu do wstrzykiwań lub infuzji
-60,proszek do sporządzania roztworu doustnego
-61,proszek do sporządzania roztworu lub zawiesiny do wstrzykiwań
-62,proszek do sporządzania zawiesiny do wstrzykiwań lub infuzji
-63,proszek do sporządzania zawiesiny doustnej
-64,proszek i rozpuszczalnik do sporządzania roztworu do infuzji
-65,proszek i rozpuszczalnik do sporządzania roztworu do wstrzykiwań
-66,proszek i rozpuszczalnik do sporządzania roztworu do wstrzykiwań lub infuzji
-67,proszek i rozpuszczalnik do sporządzania roztworu do wstrzykiwań o przedłużonym uwalnianiu
-68,proszek i rozpuszczalnik do sporządzania roztworu do wstrzykiwań/infuzji
-69,proszek i rozpuszczalnik do sporządzania zawiesiny do wstrzykiwań
-70,proszek i rozpuszczalnik do sporządzania zawiesiny do wstrzykiwań o przedłużonym uwalnianiu
-71,proszek i rozpuszczalnik do sporządzania zawiesiny o przedłużonym uwalnianiu do wstrzykiwań
-72,płyn do inhalacji z nebulizatora
-73,płyn na skórę
-74,roztw. do wstrz.
-75,roztwór do infuzji
-76,roztwór do inhalacji
-77,roztwór do nebulizacji
-78,roztwór do wstrz.
-79,roztwór do wstrzykiwań
-80,roztwór do wstrzykiwań domięśniowych
-81,roztwór do wstrzykiwań i infuzji
-82,roztwór do wstrzykiwań lub infuzji
-83,roztwór do wstrzykiwań w ampułko-strzykawce
-84,roztwór do wstrzykiwań we wkładzie
-85,roztwór do wstrzykiwań we wkładzie 
-86,roztwór do wstrzykiwań we wkładzie do wstrzykiwacza półautomatycznego
-87,roztwór do wstrzykiwań we wkładzie do wstrzykiwacza półautomatycznego 
-88,roztwór do wstrzykiwań we wstrzykiwaczu
-89,roztwór do wstrzykiwań we wstrzykiwaczu 
-90,roztwór doustny
-91,roztwór doustny 
-92,roztwór na skórę
-93,syrop
-94,system transdermalny
-95,"system transdermalny, plaster"
-96,tabl.
-97,tabl. do rozgryzania i żucia
-98,tabl. do sporz. zaw. doustnej
-99,tabl. do sporządzania zawiesiny doustnej
-100,tabl. do sporządzania zawiesiny doustnej/tabl. ulegające rozpadowi w jamie ustnej
-101,tabl. do sporządzania zawiesiny/do rozgryzania i żucia
-102,tabl. dojel.
-103,tabl. dojelitowe
-104,tabl. dopochwowe
-105,tabl. doustne o przedłużonym uwalnianiu
-106,tabl. draż.
-107,tabl. drażowane
-108,tabl. o przedł. uwalnianiu
-109,tabl. o przedłużonym działaniu
-110,tabl. o przedłużonym uwalnianiu
-111,tabl. o zmodyfikowanym uwalnianiu
-112,tabl. podjęzykowe
-113,tabl. podpoliczkowe
-114,tabl. powl.
-115,tabl. powl. o przedłużonym uwalnianiu
-116,tabl. powl. o zmodyfikowanym uwalnianiu
-117,tabl. ulegające rozpadowi w jamie ustnej
-118,tabl.powl.
-119,tabletka powlekana
-120,tabletki
-121,tabletki dojelitowe
-122,tabletki o przedłużonym uwalnianiu
-123,tabletki o zmodyfikowanym uwalnianiu
-124,tabletki powlekane
-125,tabletki ulegające rozpadowi w jamie ustnej
-126,"twarda, kaps. o zmodyfikowanym uwalnianiu, twarde"
-127,zawiesina do nebulizacji
-128,zawiesina do wstrzykiwań
-129,zawiesina do wstrzykiwań o przedłużonym uwalnianiu
-130,zawiesina do wstrzykiwań w ampułko-strzykawce
-131,zawiesina do wstrzykiwań we wkładzie
-132,zawiesina doodbytnicza
-133,zawiesina doustna
-134,żel
+4,"aerozol inhalacyjny, zawiesina"
+5,"aerozol podjęzykowy, roztwór"
+6,"aerozol wziewny, roztwór"
+7,"aerozol wziewny, zawiesina"
+8,czopki
+9,granulat do sporządzania roztworu doustnego
+10,granulat do sporządzania zawiesiny doustnej
+11,granulat musujący
+12,granulat o przedłużonym uwalnianiu
+13,implant
+14,implant podskórny
+15,implant w amp.-strz.
+16,kaps.
+17,kaps. dojel.
+18,kaps. dojel. twarde
+19,"kaps. dojelitowe, twarde"
+20,kaps. elastyczne
+21,kaps. miękkie
+22,kaps. o przedł. uwalnianiu twarde
+23,kaps. o przedłużonym uwalnianiu
+24,"kaps. o przedłużonym uwalnianiu, twarde"
+25,kaps. o zmodyfikowanym uwalnianiu
+26,"kaps. o zmodyfikowanym uwalnianiu, twarde"
+27,kaps. twarde
+28,kaps. twarde o zmodyfikowanym uwalnianiu
+29,kaps.miękkie
+30,"kapsułki o zmodyfikowanym uwalnianiu, twarde, kaps. o zmodyfikowanym uwalnianiu, twarde"
+31,koncentrat do sporządzania roztworu do infuzji
+32,krem
+33,krople do oczu
+34,"krople do oczu, roztwór"
+35,"krople do oczu, roztwór w pojemniku jednodawkowym"
+36,"krople do oczu, zawiesina"
+37,krople doustne
+38,"krople doustne, roztwór"
+39,"liofilizat do sporządzania roztworu do wstrzykiwań, infuzji i inhalacji"
+40,liofilizat doustny
+41,maść
+42,"mikrowlewka doodbytnicza, roztwór"
+43,piana na skórę
+44,proszek do inhalacji
+45,proszek do inhalacji w kaps. twardej
+46,proszek do inhalacji w kaps. twardych
+47,"proszek do inhalacji, podzielony"
+48,proszek do sporządzania roztworu do wstrzykiwań
+49,proszek do sporządzania roztworu do wstrzykiwań lub infuzji
+50,proszek do sporządzania roztworu doustnego
+51,proszek do sporządzania roztworu lub zawiesiny do wstrzykiwań
+52,proszek do sporządzania zawiesiny do wstrzykiwań lub infuzji
+53,proszek do sporządzania zawiesiny doustnej
+54,proszek i rozpuszczalnik do sporządzania roztworu do infuzji
+55,proszek i rozpuszczalnik do sporządzania roztworu do wstrzykiwań
+56,proszek i rozpuszczalnik do sporządzania roztworu do wstrzykiwań lub infuzji
+57,proszek i rozpuszczalnik do sporządzania roztworu do wstrzykiwań o przedłużonym uwalnianiu
+58,proszek i rozpuszczalnik do sporządzania roztworu do wstrzykiwań/infuzji
+59,proszek i rozpuszczalnik do sporządzania zawiesiny do wstrzykiwań
+60,proszek i rozpuszczalnik do sporządzania zawiesiny do wstrzykiwań o przedłużonym uwalnianiu
+61,proszek i rozpuszczalnik do sporządzania zawiesiny o przedłużonym uwalnianiu do wstrzykiwań
+62,płyn do inhalacji z nebulizatora
+63,płyn na skórę
+64,roztw. do wstrz.
+65,roztwór do infuzji
+66,roztwór do inhalacji
+67,roztwór do nebulizacji
+68,roztwór do wstrzykiwań domięśniowych
+69,roztwór do wstrzykiwań i infuzji
+70,roztwór do wstrzykiwań lub infuzji
+71,roztwór do wstrzykiwań w ampułko-strzykawce
+72,roztwór do wstrzykiwań we wkładzie
+73,roztwór do wstrzykiwań we wkładzie do wstrzykiwacza półautomatycznego
+74,roztwór do wstrzykiwań we wstrzykiwaczu
+75,roztwór doustny
+76,roztwór na skórę
+77,syrop
+78,system transdermalny
+79,"system transdermalny, plaster"
+80,tabl.
+81,tabl. do rozgryzania i żucia
+82,tabl. do sporz. zaw. doustnej
+83,tabl. do sporządzania zawiesiny doustnej/tabl. ulegające rozpadowi w jamie ustnej
+84,tabl. do sporządzania zawiesiny/do rozgryzania i żucia
+85,tabl. dojel.
+86,tabl. dopochwowe
+87,tabl. doustne o przedłużonym uwalnianiu
+88,tabl. draż.
+89,tabl. o przedł. uwalnianiu
+90,tabl. o przedłużonym działaniu
+91,tabl. o zmodyfikowanym uwalnianiu
+92,tabl. podjęzykowe
+93,tabl. podpoliczkowe
+94,tabl. powl.
+95,tabl. powl. o przedłużonym uwalnianiu
+96,tabl. powl. o zmodyfikowanym uwalnianiu
+97,tabl. ulegające rozpadowi w jamie ustnej
+98,tabl.powl.
+99,"twarda, kaps. o zmodyfikowanym uwalnianiu, twarde"
+100,zawiesina do nebulizacji
+101,zawiesina do wstrzykiwań
+102,zawiesina do wstrzykiwań o przedłużonym uwalnianiu
+103,zawiesina do wstrzykiwań w ampułko-strzykawce
+104,zawiesina do wstrzykiwań we wkładzie
+105,zawiesina doodbytnicza
+106,zawiesina doustna
+107,żel
