@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Wyszukiwarka{% endblock %}
+{% block content %}
+<h5>
+ Wybierz szukaną substancję aktywną:
+</h5>
+<p>
+<br>
+<table>
+ {% for sub in substances %}
+   <tr> <td> <a href="/results?sub={{sub}}"> {{ sub }} </a> </td></tr>
+ {% endfor %}
+</table>
+</p>
+
+{% endblock %}
