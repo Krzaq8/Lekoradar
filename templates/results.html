@@ -10,25 +10,31 @@
     }
 </style>
 
+<h5> Wyniki dla {{request.args.get('sub')}} </h5>
 <p>
+
+
 <table>
-    <tr style="background-color: #2874a6;color:white;">
-        {% for el in table_header %}
-            <td> {{el}} </td>
-        {% endfor %}
-    </tr>
     {% for row in table %}
-        <tr>
+        {% if loop.index == 1 %}
+            <tr style="background-color: #2874a6;color:white;">
             {% for el in row %}
                 <td> {{el}} </td>
             {% endfor %}
-        </tr>
+            </tr>
+        {% else %}
+            <tr>
+            {% for el in row %}
+                <td> {{el}} </td>
+            {% endfor %}
+            </tr>
+        {% endif %}
     {% endfor %}
 </table>
 
 <br>
 
-<a href="/" style="text-decoration: underline;"> powrót do wyboru substancji </a>
+<a href="/" > powrót do wyboru substancji </a>
 </p>
 
 {% endblock %}

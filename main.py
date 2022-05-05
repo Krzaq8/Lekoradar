@@ -15,13 +15,13 @@ def home():
 def results():
     # TODO tutaj wstawiam funkcję od Asi, która zwraca tabelę wynikową dla konkretnej substancji aktywnej
     # result_table = get_result_table(request.args.get('sub'))
-    result_table = [["a", "b", "c", "d"], ["e", "f", "g", "h"], ["i", "j", "k", "l"]]
-    return render_template("results.html", table=result_table, table_header=["h1", "h2", "h3", "h4"])
+    result_table = [["h1", "h2", "h3", "h4"], ["a", "b", "c", "d"], ["e", "f", "g", "h"], ["i", "j", "k", "l"]]
+    return render_template("results.html", table=result_table)
 
 def get_substance_list(file_address):
     with open(file_address) as csv_file:
         reader = csv.reader(csv_file, delimiter=',')
-        return [el for el in next(reader)]
+        return next(reader)
 
 if __name__ == "__main__":
     app.run(debug=True)
