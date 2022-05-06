@@ -1,5 +1,8 @@
 # Lekoradar
 Farmaceutyczna baza danych
 
+# Instalacja bibliotek
+Skrypt instalujący wymagane biblioteki jest w dependencies.sh
+
 # Użycie:
-użycie lokalnie za pomocą run.sh
+Użycie lokalnie za pomocą run.sh
