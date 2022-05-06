@@ -1,4 +1,8 @@
 import pandas as pd
+import numpy as np
+import re 
+import sys
+sys.path.append('../')
 
 def remove_white_chars(text):
   p = 0
@@ -11,13 +15,11 @@ def remove_white_chars(text):
 
   return text[p:q + 1]
 
-data_frame = pd.read_excel('./init_data.xlsx', sheet_name='A1')
-data_frame.to_csv('./init_data.csv', index = None, header=False, sep='|')
+data_frame = pd.read_excel('./source_data.xlsx', sheet_name='A1')
+data_frame.to_csv('./tmp_data.csv', index = None, header=False, sep='|')
 
-import numpy as np
-import re 
 
-raw_data = np.loadtxt("init_data.csv", skiprows = 1, delimiter = '|', dtype=str)
+raw_data = np.loadtxt("tmp_data.csv", skiprows = 1, delimiter = '|', dtype=str)
 data = [[] for i in range(len(raw_data))]
 
 active_substances = dict()
@@ -132,3 +134,11 @@ for group in substitute_groups:
 
 top_subs.sort()
 top_subs.reverse()
+
+from database.connection import connection
+from sqlalchemy import text
+
+with connection() as con:
+  with open("init_tables.sql") as file:
+    query = text(file.read())
+    con.execute(query)
