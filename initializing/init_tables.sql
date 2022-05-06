@@ -19,8 +19,8 @@ create table Medicine (
     name text not null,
     ingredient integer not null references Ingredient,
     quantity integer not null,
-    id_code integer not null,
+    id_code text not null,
     refund_scope text not null,
-    refund integer not null,
-    surcharge integer not null
+    refund text not null,
+    surcharge real not null
 );

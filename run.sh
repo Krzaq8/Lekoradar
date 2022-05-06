@@ -5,25 +5,34 @@ USAGE="[-u|--update] [-i|--initialize] [-r|--run]"
 initialize_data() {
   cd initializing
   python3 init_data.py
-  rm tmp_data.csv
+  OK=$?
+  rm tmp_data.csv > /dev/null
   cd ..
+  if [ $OK ] ; then
+    echo "Zainicjowano dane w bazie"
+  else
+    echo "Nieudana inicjalizacja"
+  fi
 }
 
 install_dependencies() {
-  pip -V
-  if [$? != 0] ; then 
+  pip -V > /dev/null
+  if [ $? != 0 ] ; then 
     echo "Zainstaluj najpierw pip, np. z tego tutoriala:" ;
     echo "https://www.tecmint.com/install-pip-in-linux/" ;
     exit 1 ; 
   fi
 
-  pip install --upgrade pip
-  pip install --upgrade pandas
-  pip install --upgrade numpy
-  pip install --upgrade SQLAlchemy
-  pip install --upgrade Flask
-  pip install --upgrade Flask-Bootstrap
+  pip install --upgrade pip > /dev/null
+  pip install --upgrade pandas > /dev/null
+  pip install --upgrade numpy > /dev/null
+  pip install --upgrade SQLAlchemy > /dev/null
+  pip install --upgrade Flask > /dev/null
+  pip install --upgrade Flask-Bootstrap > /dev/null
+  echo "Zainstalowano wymagane biblioteki"
 }
+
+cd $(dirname $0)
 
 ARGS=$(getopt -o uir --long update,initialize,run -- "$@" 2> /dev/null)
 if [ $? != 0 ] ; then echo "Użycie:" $0 $USAGE ; exit 1 ; fi

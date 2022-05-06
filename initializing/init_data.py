@@ -52,6 +52,9 @@ def add_form(new_form):
   return new_form
 
 
+# Pierwsza iteracja: zbieramy dane.
+# Te których nie trzeba obrabiać od razu wrzucamy, resztę dodajemy do struktur.
+
 for (i, med) in enumerate(raw_data):
   match = re.search(r'\d,\d', med[2])
   while match:
@@ -80,18 +83,21 @@ for (i, med) in enumerate(raw_data):
     active_substances_r[k] = med[1]
   as_id = active_substances[med[1]]
 
-  data[i] = [as_id, 0, name, old_form, dose, med[3], med[4], med[12], med[14], med[15]]
+  quantity = list(map(int, re.findall(r'\d+', med[3])))[0]
+  surcharge = float(med[15].replace(',', '.'))
+
+  data[i] = [as_id, 0, name, old_form, dose, quantity, med[4], med[12], med[14], surcharge]
   names_s.add(name)
   doses_s.add(dose)
 
 
+# W drugiej iteracji znamy już najkrótsze napisy postaci.
+# Dla każdej takiej szukamy jej najdłuższego odpowiednika.
+# Ponadto możemy podzielić już na grupy odpowiedników.
+
 for i in range(len(data)):
   current_form = data[i][3]
   root_form = add_form(current_form)
-#  for regex, form in forms:
-#    if re.fullmatch(regex, current_form):
-#      root_form = form
-#      break
   
   if root_form not in forms_d:
     forms_d[root_form] = current_form
@@ -113,32 +119,78 @@ for i in range(len(data)):
   data[i][1] = sub_id
 
 
+# W trzeciej iteracji uzupełniamy najdłuższą nazwę.
+
 for i in range(len(data)):
   data[i][3] = forms_d[add_form(data[i][3])]
 
-names = list(names_s)
-names.sort()
-forms_l = list(map(lambda form: forms_d[form[1]], forms))
-forms_l.sort()
-doses = list(doses_s)
-doses.sort()
-pd.DataFrame(names, columns=['name']).to_csv('names.csv')
-pd.DataFrame(forms_l, columns=['form']).to_csv('forms.csv')
-pd.DataFrame(doses, columns=['dose']).to_csv('doses.csv')
 
-top_subs = list()
-for group in substitute_groups:
-  id, counter = substitute_groups[group]
-  as_id, form, dose = group
-  top_subs.append((counter, active_substances_r[as_id], form, dose,))
+def more_stats():
+  names = list(names_s)
+  names.sort()
+  forms_l = list(map(lambda form: forms_d[form[1]], forms))
+  forms_l.sort()
+  doses = list(doses_s)
+  doses.sort()
+  pd.DataFrame(names, columns=['name']).to_csv('names.csv')
+  pd.DataFrame(forms_l, columns=['form']).to_csv('forms.csv')
+  pd.DataFrame(doses, columns=['dose']).to_csv('doses.csv') 
 
-top_subs.sort()
-top_subs.reverse()
+  top_subs = list()
+  for group in substitute_groups:
+    id, counter = substitute_groups[group]
+    as_id, form, dose = group
+    top_subs.append((counter, active_substances_r[as_id], form, dose,))
 
-from database.connection import connection
-from sqlalchemy import text
+  top_subs.sort()
+  top_subs.reverse()
+
+
+# Poniżej łączymy się z bazą danych i uzupełniamy dane początkowe.
+
+from database.connection import connection, engine
+from sqlalchemy import text, MetaData, insert
+
+meta = MetaData(bind=engine)
+meta.reflect()
+active_substances_t = meta.tables['active_substance']
+ingredients = meta.tables['ingredient']
+medicines = meta.tables['medicine']
 
 with connection() as con:
   with open("init_tables.sql") as file:
     query = text(file.read())
+    con.execute(query)
+  
+  for as_name, as_id in active_substances.items():
+    query = insert(active_substances_t).values(
+      id=as_id, 
+      name=as_name
+    )
+    con.execute(query)
+
+  for group, id in substitute_groups.items():
+    sub_id, _ = id
+    as_id, sub_form, sub_dose = group
+    query = insert(ingredients).values(
+      id=sub_id, 
+      form=sub_form, 
+      dose=sub_dose, 
+      active_substance=as_id
+    )
+    con.execute(query)
+
+# data[i] = [as_id, 0, name, old_form, dose, quantity, med[4], med[12], med[14], med[15]]
+# id | name | ingredient | quantity | id_code | refund_scope | refund | surcharge
+  for i, med in enumerate(data):
+    query = insert(medicines).values(
+      id=(i + 1), 
+      name=med[2], 
+      ingredient=med[1], 
+      quantity=med[5], 
+      id_code=med[6], 
+      refund_scope=med[7],
+      refund=med[8],
+      surcharge=med[9]
+    )
     con.execute(query)
