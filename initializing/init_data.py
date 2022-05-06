@@ -15,8 +15,8 @@ def remove_white_chars(text):
 
   return text[p:q + 1]
 
-data_frame = pd.read_excel('./source_data.xlsx', sheet_name='A1')
-data_frame.to_csv('./tmp_data.csv', index = None, header=False, sep='|')
+data_frame = pd.read_excel('source_data.xlsx', sheet_name='A1')
+data_frame.to_csv('tmp_data.csv', index = None, header=False, sep='|')
 
 
 raw_data = np.loadtxt("tmp_data.csv", skiprows = 1, delimiter = '|', dtype=str)

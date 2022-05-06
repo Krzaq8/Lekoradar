@@ -1,8 +1,13 @@
 # Lekoradar
 Farmaceutyczna baza danych
 
-# Instalacja bibliotek
-Skrypt instalujący wymagane biblioteki jest w dependencies.sh
+## Uruchomienie serwera
+```bash run.sh```
 
-# Użycie:
-Użycie lokalnie za pomocą run.sh
+Można skorzystać z opcji ```-r``` lub ```--run```
+
+## Instalacja bibliotek
+```bash run.sh -u``` lub ```bash run.sh --update```
+
+## Inicjalizacja danych
+```bash run.sh -i``` lub ```bash run.sh --initialize```
