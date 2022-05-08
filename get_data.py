@@ -1,6 +1,25 @@
-import database.connection
+from database.connection import connection
 
-query = 'SELECT M.id, M.name, I.form, I.dose, M.quantity, M.id_code, M.refund_scope, M.refund, M.surcharge FROM Medicine M, Ingredient I WHERE I.id=M.id AND I.active_substance={} ORDER BY I.dose, I.form'
+query = '''SELECT 
+  M.id, 
+  M.name, 
+  I.form, 
+  I.dose, 
+  M.quantity, 
+  M.id_code, 
+  M.refund_scope, 
+  M.refund, 
+  M.surcharge 
+FROM 
+  Medicine M, 
+  Ingredient I 
+WHERE 
+  I.id = M.id 
+  AND I.active_substance = {} 
+ORDER BY 
+  I.dose, 
+  I.form'''
+
 count_no = 0
 form_no = 2
 dose_no = 3
@@ -11,8 +30,8 @@ def get_result_table(sub):
     with connection() as con:
         data_tuples = con.execute(query.format(sub)).fetchall()
         
-        if result == []
-            return result
+        if data_tuples == []:
+            return data_tuples
 
         data = [list(i) for i in data]
         group_start = 0
@@ -39,5 +58,5 @@ def get_result_table(sub):
 
 def get_substance_table():
     with connection() as con:
-        subs_tuples = con.execute('SELECT * FROM Active_substance').fetchall
+        subs_tuples = con.execute('''SELECT * FROM Active_substance''').fetchall
         return [list(sub) for sub in subs_tuples]
