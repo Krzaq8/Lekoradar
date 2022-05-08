@@ -33,7 +33,7 @@ def get_result_table(sub):
         if data_tuples == []:
             return data_tuples
 
-        data = [list(i) for i in data]
+        data = [list(i) for i in data_tuples]
         group_start = 0
         group_end = 1
         count = 1
