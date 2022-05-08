@@ -9,10 +9,10 @@ surcharge_no = 8
 
 def get_result_table(sub):
     with connection() as con:
-        data_tuples = con.execute(query.format(sub))
+        data_tuples = con.execute(query.format(sub)).fetchall()
         
-        if result == ()
-            return []
+        if result == []
+            return result
 
         data = [list(i) for i in data]
         group_start = 0
@@ -39,5 +39,5 @@ def get_result_table(sub):
 
 def get_substance_table():
     with connection() as con:
-        subs_tuples = con.execute('SELECT * FROM Active_substance')
+        subs_tuples = con.execute('SELECT * FROM Active_substance').fetchall
         return [list(sub) for sub in subs_tuples]
