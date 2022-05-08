@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 from flask_bootstrap import Bootstrap
+from get_data import get
 import csv
 
 app = Flask(__name__)
@@ -14,8 +15,8 @@ def home():
 @app.route("/results")
 def results():
     # TODO tutaj wstawiam funkcję od Asi, która zwraca tabelę wynikową dla konkretnej substancji aktywnej
-    # result_table = get_result_table(request.args.get('sub'))
-    result_table = [["h1", "h2", "h3", "h4"], ["a", "b", "c", "d"], ["e", "f", "g", "h"], ["i", "j", "k", "l"]]
+    result_table = get_result_table(request.args.get('sub'))
+    # result_table = [["h1", "h2", "h3", "h4"], ["a", "b", "c", "d"], ["e", "f", "g", "h"], ["i", "j", "k", "l"]]
     return render_template("results.html", table=result_table)
 
 def get_substance_list(file_address):

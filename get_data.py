@@ -7,7 +7,7 @@ dose_no = 3
 quantity_no = 4
 surcharge_no = 8
 
-def get(sub):
+def get_result_table(sub):
     with connection() as con:
         data_tuples = con.execute(query.format(sub))
         
