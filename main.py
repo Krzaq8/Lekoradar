@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 from flask_bootstrap import Bootstrap
-from get_data import get
+from get_data import get_substance_table, get_result_table
 import csv
 
 app = Flask(__name__)

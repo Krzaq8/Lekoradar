@@ -36,3 +36,8 @@ def get_result_table(sub):
         data[group_start:group_end].sort(key=lambda med: med[surcharge_no]/med[quantity_no])
 
         return data
+
+def get_substance_table():
+    with connection() as con:
+        subs_tuples = con.execute('SELECT * FROM Active_substance')
+        return [list(sub) for sub in subs_tuples]
