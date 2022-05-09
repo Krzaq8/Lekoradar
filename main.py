@@ -9,7 +9,8 @@ Bootstrap(app)
 @app.route("/")
 def home():
     # TODO tutaj umieszczam subtancje z osobnego pliku z subtancjami, plik jest tworzony przy starcie apliakcji czy coś
-    substances = get_substance_list('substancje.csv')
+    # substances = get_substance_list('substancje.csv')
+    substances = get_substance_table()
     return render_template("home.html", substances=substances)
 
 @app.route("/results")

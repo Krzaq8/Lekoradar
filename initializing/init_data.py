@@ -112,10 +112,9 @@ for i in range(len(data)):
   dose = data[i][4]
   if (as_id, root_form, dose) not in substitute_groups:
     l += 1
-    substitute_groups[(as_id, root_form, dose)] = (l, 0)
-  sub_id, counter = substitute_groups[(as_id, root_form, dose)]
-  counter += 1
-  substitute_groups[(as_id, root_form, dose)] = (sub_id, counter)
+    substitute_groups[(as_id, root_form, dose)] = l
+  sub_id = substitute_groups[(as_id, root_form, dose)]
+
   data[i][1] = sub_id
 
 
@@ -138,9 +137,9 @@ def more_stats():
 
   top_subs = list()
   for group in substitute_groups:
-    id, counter = substitute_groups[group]
+    id = substitute_groups[group]
     as_id, form, dose = group
-    top_subs.append((counter, active_substances_r[as_id], form, dose,))
+    top_subs.append((active_substances_r[as_id], form, dose))
 
   top_subs.sort()
   top_subs.reverse()
@@ -171,8 +170,7 @@ with connection() as con:
     )
     con.execute(query)
 
-  for group, id in substitute_groups.items():
-    sub_id, _ = id
+  for group, sub_id in substitute_groups.items():
     as_id, sub_form, sub_dose = group
     query = insert(ingredients).values(
       id=sub_id, 
@@ -182,7 +180,7 @@ with connection() as con:
     )
     con.execute(query)
 
-# data[i] = [as_id, 0, name, old_form, dose, quantity, med[4], med[12], med[14], med[15]]
+# data[i] = [as_id, sub_id, name, old_form, dose, quantity, med[4], med[12], med[14], med[15]]
 # id | name | ingredient | quantity | id_code | refund_scope | refund | surcharge
   for i, med in enumerate(data):
     query = insert(medicines).values(
