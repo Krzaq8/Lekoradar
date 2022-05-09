@@ -151,6 +151,12 @@ def more_stats():
 from database.connection import connection, engine
 from sqlalchemy import text, MetaData, insert
 
+
+with connection() as con:
+  with open("init_tables.sql") as file:
+    query = text(file.read())
+    con.execute(query)
+  
 meta = MetaData(bind=engine)
 meta.reflect()
 active_substances_t = meta.tables['active_substance']
@@ -158,10 +164,6 @@ ingredients = meta.tables['ingredient']
 medicines = meta.tables['medicine']
 
 with connection() as con:
-  with open("init_tables.sql") as file:
-    query = text(file.read())
-    con.execute(query)
-  
   for as_name, as_id in active_substances.items():
     query = insert(active_substances_t).values(
       id=as_id, 
