@@ -8,7 +8,7 @@ initialize_data() {
   OK=$?
   rm tmp_data.csv > /dev/null
   cd ..
-  if [ $OK ] ; then
+  if [ $OK == 0 ] ; then
     echo "Zainicjowano dane w bazie"
   else
     echo "Nieudana inicjalizacja"
@@ -26,6 +26,7 @@ install_dependencies() {
   pip install --upgrade pip > /dev/null
   pip install --upgrade pandas > /dev/null
   pip install --upgrade numpy > /dev/null
+  pip install --upgrade psycopg2-binary > /dev/null
   pip install --upgrade SQLAlchemy > /dev/null
   pip install --upgrade Flask > /dev/null
   pip install --upgrade Flask-Bootstrap > /dev/null
