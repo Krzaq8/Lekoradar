@@ -7,8 +7,8 @@
 <p>
 <br>
 <table>
- {% for sub in substances %}
-   <tr> <td> <a href="/results?sub={{sub}}"> {{ sub }} </a> </td></tr>
+ {% for id, sub in substances %}
+   <tr> <td> <a href="{{ url_for('results', sub=id) }}"> {{ sub }} </a> </td></tr>
  {% endfor %}
 </table>
 </p>

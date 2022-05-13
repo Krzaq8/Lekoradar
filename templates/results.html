@@ -10,7 +10,7 @@
     }
 </style>
 
-<h5> Wyniki dla {{request.args.get('sub')}} </h5>
+<h5> Wyniki dla {{sub_name}} </h5>
 <p>
 
 
@@ -34,7 +34,7 @@
 
 <br>
 
-<a href="/" > powrót do wyboru substancji </a>
+<a href="{{ url_for('home') }}"> Powrót do wyszukiwania </a>
 </p>
 
 {% endblock %}
