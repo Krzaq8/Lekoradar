@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 from flask_bootstrap import Bootstrap
-from get_data import get_substance_name, get_substance_table, get_result_table
+from database.get_data import get_substance_name, get_substance_table, get_result_table
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "2b3f12f3ef12a6c86b"

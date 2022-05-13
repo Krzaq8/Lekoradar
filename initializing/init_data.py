@@ -86,7 +86,7 @@ for (i, med) in enumerate(raw_data):
   quantity = list(map(int, re.findall(r'\d+', med[3])))[0]
   surcharge = float(med[15].replace(',', '.'))
 
-  data[i] = [as_id, 0, name, old_form, dose, quantity, med[4], med[12], med[14], surcharge]
+  data[i] = [as_id, 0, name, old_form, dose, quantity, med[4], med[12], med[14], surcharge, form]
   names_s.add(name)
   doses_s.add(dose)
 
@@ -97,7 +97,7 @@ for (i, med) in enumerate(raw_data):
 
 for i in range(len(data)):
   current_form = data[i][3]
-  root_form = add_form(current_form)
+  root_form = data[i][10]
   
   if root_form not in forms_d:
     forms_d[root_form] = current_form
@@ -120,8 +120,8 @@ for i in range(len(data)):
 
 # W trzeciej iteracji uzupełniamy najdłuższą nazwę.
 
-for i in range(len(data)):
-  data[i][3] = forms_d[add_form(data[i][3])]
+# for i in range(len(data)):
+#   data[i][3] = forms_d[add_form(data[i][3])]
 
 
 def more_stats():
@@ -174,7 +174,7 @@ with connection() as con:
     as_id, sub_form, sub_dose = group
     query = insert(ingredients).values(
       id=sub_id, 
-      form=sub_form, 
+      form=forms_d[sub_form], 
       dose=sub_dose, 
       active_substance=as_id
     )

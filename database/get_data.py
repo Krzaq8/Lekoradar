@@ -1,4 +1,5 @@
-from operator import and_
+import sys
+sys.path.append('../')
 from database.connection import connection, engine
 from sqlalchemy import MetaData, select
 
