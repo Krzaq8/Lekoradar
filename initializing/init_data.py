@@ -1,26 +1,94 @@
+from os import sep
 import pandas as pd
 import numpy as np
 import re 
 import sys
 sys.path.append('../')
 
-def remove_white_chars(text):
-  p = 0
-  q = len(text) - 1
 
-  while p <= q and text[p] == ' ':
-    p += 1
-  while p <= q and text[q] == ' ':
-    q -= 1
+# Sprowadza tekst zawartości do prostszej formy. 
+# Zamienia słowa kluczowe na 'X' jeśli wartości po obu stronach 'X' mają być przemnożone.
+def normal_quantity_form(quantity):
+  quantity = quantity.replace('(', '').replace(')', '')
+  quantity = quantity.replace('. a', '.').replace('.a', '.').replace('. po', '.').replace('.po', '.')
+  quantity = quantity\
+    .replace('but.', 'X')\
+    .replace('amp.', 'X')\
+    .replace('butelka', 'X')\
+    .replace('butelka po', 'X')\
+    .replace('butelki', 'X')\
+    .replace('butelki po', 'X')\
+    .replace('x', 'X')\
+    .replace('bliser', 'X')\
+    .replace('fiol.', 'X')\
+    .replace('inh.', 'X')\
+    .replace('inhalator', 'X')\
+    .replace('tuba', 'X')\
+    .replace('poj.', 'X')\
+    .replace('wstrzyk.', 'X')\
+    .replace('wstrz. SoloStar po', 'X')\
+    .replace('wstrz.', 'X')\
+    .replace('wstrzykiwaczy', 'X')\
+    .replace('worek po', 'X')
+  return quantity
 
-  return text[p:q + 1]
+
+# Wyłuskuje pierwszą znalezioną liczbę rzeczywistą w tekscie.
+def get_first_number(text):
+  return float(list(re.findall(r'\d+[.,]?\d*', text))[0].replace(',', '.'))
+
+
+# Zamienia w tekście przecinki oddzielające liczby na kropki.
+def comas_to_dots_in_floats(text):
+  match = re.search(r'\d,\d', text)
+  while match:
+    idx = match.start() + 1
+    text = text[:idx] + '.' + text[idx + 1:]
+    match = re.match(r'\d,\d', text)
+  return text
+
+
+# Wyznacza z tekstu nazwę, postać i dawkę leku.
+def separate_name_form_dose(text):
+  elements = comas_to_dots_in_floats(text).split(',')
+  form = ''
+  dose = ''
+
+  for (j, form_trait) in enumerate(elements[1:]):
+    if re.match(r'.*\d.*', form_trait):
+      form = ','.join(elements[1:j + 1])
+      dose = ','.join(elements[j + 1:])
+      break
+
+  return (elements[0], form.strip(), dose.strip())
+
+
+# Zamienia tekst zawartości opakowania na wartość liczbową.
+def get_quantity(quantity_string):
+  parts = normal_quantity_form(quantity_string).split(' ')
+  if len(parts) >= 3 and parts[1] == 'X':
+    return float(parts[0]) * get_first_number(parts[2])
+  else:
+    return get_first_number(quantity_string)
+
+
+# Poprawia tekst postaci, w której pozostały błędy po automatycznej obróbce.
+def correct_final_form(form):
+  return form\
+    .replace('kaps.', 'kapsułki')\
+    .replace('dojel.', 'dojelitowe')\
+    .replace('amp.-strzyk..', 'ampułko-strzykawce')\
+    .replace('tabl.', 'tabletki')\
+    .replace('powl.', 'powlekane')\
+    .replace('przedł.', 'przedłużonym')\
+    .replace('kapsułce twardej', 'kapsułkach twardych')
+
 
 data_frame = pd.read_excel('source_data.xlsx', sheet_name='A1')
 data_frame.to_csv('tmp_data.csv', index = None, header=False, sep='|')
 
-
 raw_data = np.loadtxt("tmp_data.csv", skiprows = 1, delimiter = '|', dtype=str)
-data = [[] for i in range(len(raw_data))]
+data = [[] for _ in range(len(raw_data))]
 
 active_substances = dict()
 active_substances_r = dict()
@@ -32,6 +100,9 @@ doses_s = set()
 forms = list()
 forms_d = dict()
 
+
+# Dodaje nową postać do zbioru.
+# Dwie postacie są takie same jeśli jedną da się rozwinąć (skróty zakończone kropką) do drugiej.
 def add_form(new_form):
   global forms
   new_regex = new_form.replace('.', r'[a-ząćęńłśóżź]*\.? ?')
@@ -52,39 +123,31 @@ def add_form(new_form):
   return new_form
 
 
+# Dodaje substancję do zbioru. Zwraca jej id.
+def add_substance(substance):
+  global active_substances
+
+  if substance not in active_substances:
+    add_substance.counter += 1
+    active_substances[substance] = add_substance.counter
+    active_substances_r[add_substance.counter] = substance
+  return active_substances[substance]
+
+add_substance.counter = 0
+
+
 # Pierwsza iteracja: zbieramy dane.
 # Te których nie trzeba obrabiać od razu wrzucamy, resztę dodajemy do struktur.
 
 for (i, med) in enumerate(raw_data):
-  match = re.search(r'\d,\d', med[2])
-  while match:
-    idx = match.start() + 1
-    med[2] = med[2][:idx] + '.' + med[2][idx + 1:]
-    match = re.match(r'\d,\d', med[2])
+  name, old_form, dose = separate_name_form_dose(med[2])
 
-  sth = med[2].split(',')
-  name = sth[0]
-  form = ''
-  dose = ''
-
-  for (j, form_trait) in enumerate(sth[1:]):
-    if re.match(r'.*\d.*', form_trait):
-      form = ','.join(sth[1:j + 1])
-      dose = ','.join(sth[j + 1:])
-      break
-
-  dose = remove_white_chars(dose)
-  old_form = remove_white_chars(form)
   form = add_form(old_form)
 
-  if med[1] not in active_substances:
-    k += 1
-    active_substances[med[1]] = k
-    active_substances_r[k] = med[1]
-  as_id = active_substances[med[1]]
+  as_id = add_substance(med[1])
 
-  quantity = list(map(int, re.findall(r'\d+', med[3])))[0]
-  surcharge = float(med[15].replace(',', '.'))
+  quantity = get_quantity(med[3])
+  surcharge = get_first_number(med[15])
 
   data[i] = [as_id, 0, name, old_form, dose, quantity, med[4], med[12], med[14], surcharge, form]
   names_s.add(name)
@@ -94,6 +157,7 @@ for (i, med) in enumerate(raw_data):
 # W drugiej iteracji znamy już najkrótsze napisy postaci.
 # Dla każdej takiej szukamy jej najdłuższego odpowiednika.
 # Ponadto możemy podzielić już na grupy odpowiedników.
+
 
 for i in range(len(data)):
   current_form = data[i][3]
@@ -118,13 +182,11 @@ for i in range(len(data)):
   data[i][1] = sub_id
 
 
-# W trzeciej iteracji uzupełniamy najdłuższą nazwę.
-
-# for i in range(len(data)):
-#   data[i][3] = forms_d[add_form(data[i][3])]
-
-
 def more_stats():
+  global names_s
+  global forms_d
+  global forms
+  global doses_s
   names = list(names_s)
   names.sort()
   forms_l = list(map(lambda form: forms_d[form[1]], forms))
@@ -135,15 +197,10 @@ def more_stats():
   pd.DataFrame(forms_l, columns=['form']).to_csv('forms.csv')
   pd.DataFrame(doses, columns=['dose']).to_csv('doses.csv') 
 
-  top_subs = list()
-  for group in substitute_groups:
-    id = substitute_groups[group]
-    as_id, form, dose = group
-    top_subs.append((active_substances_r[as_id], form, dose))
 
-  top_subs.sort()
-  top_subs.reverse()
+more_stats()
 
+quit()
 
 # Poniżej łączymy się z bazą danych i uzupełniamy dane początkowe.
 
