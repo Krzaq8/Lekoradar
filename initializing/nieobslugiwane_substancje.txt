@@ -1,0 +1,63 @@
+definitywnie wywalić:
+
+  Cefaclorum
+  Clarithromycinum
+  Fentanylum
+  Methotrexatum
+  Tramadoli hydrochloridum
+
+do odratowania (ale jakim kosztem):
+
+  Budesonidum
+  Fluticasoni propionas 
+  Salbutamolum
+
+co na pewno uwzględniać:
+  10 amp.po 3 ml
+  1 but. 60 ml
+  1 but.po 100 ml
+  1 but. po 2,5 ml
+  1 but.a 2,5 ml
+  1 but. a 100 ml
+  1 butelka 100 ml
+  3 butelki 3 ml
+  1 butelka po 3 ml
+  3 butelki po 3 ml
+  3 x 5 ml w butelce
+  1 blister 60 dawek  + inhalator Elpenhaler
+  4 fiol. (5 ml)
+  1 fiol. a 10 ml
+  1 fiol.po 3,3 ml
+  1 inh. po 60 dawek
+  1 inh.po 120 daw.
+  1 inhalator 60 dawek
+  1 inhalator (60 dawek)
+  1 tuba po 30 g
+  1 poj. 120 daw.
+  3 poj.a 2,5 ml
+  1 poj.po 120 daw.
+  10 wkł.po 3 ml
+  5 wstrzyk. po 3 ml
+  5 wstrz. SoloStar po 3 ml
+  10 wstrz. 3 ml SoloStar
+  5 wstrzykiwaczy SoloStar po 3 ml
+  1 worek po 100 ml
+
+co potencjalnie będzie trzeba uwzględniać
+  1520. 2 poj. po 120 daw.
+  1522. poj. 10 ml (120 dawek)
+  3420. 1 poj.a 200 dawek (10 ml)
+  3425. 1 poj.po 8,5 g (200 daw.)
+
+rozszerzanie nazw:
+  kaps. -> kapsułki
+  dojel. -> dojelitowe
+  amp.-strzyk. -> ampułko-strzykawce
+  tabl. -> tabletki
+  powl. -> powlekane
+  przedł. -> przedłużonym
+
+sprawdzić czy nie zmieniamy formy pojedynczej czegoś poza tabletkami i kapsułkami
+
+zamiana liczby poj. na mn.
+  kapsułce twardej -> kapsułkach twardych

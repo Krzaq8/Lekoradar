@@ -64,6 +64,10 @@ def separate_name_form_dose(text):
       dose = ','.join(elements[j + 1:])
       break
 
+  # todo: to jest okropne, do naprawienia to po ludzku
+  form = form.replace('kapsułce twardej', 'kapsułkach twardych')\
+    .replace('kaps. twardej', 'kapsułkach twardych')
+
   return (elements[0], form.strip(), dose.strip())
 
 
@@ -118,6 +122,7 @@ add_substance.counter = 0
 # Dwie postacie są takie same jeśli jedną da się rozwinąć (skróty zakończone kropką) do drugiej.
 def add_form(new_form):
   global forms
+
   new_regex = new_form.replace('.', r'[a-ząćęńłśóżź]*\.? ?')
 #  new_regex = new_form.replace('.', r'\.')
   matched = False
@@ -232,12 +237,10 @@ def more_stats():
   pd.DataFrame(forms_l, columns=['form']).to_csv('forms.csv')
   pd.DataFrame(doses, columns=['dose']).to_csv('doses.csv') 
 
-
 more_stats()
 
-quit()
 
-# Poniżej łączymy się z bazą danych i uzupełniamy dane początkowe.
+# Poniżej łączymy się z bazą danych i inicjujemy tabele i dane początkowe.
 
 from database.connection import connection, engine
 from sqlalchemy import text, MetaData, insert
@@ -250,39 +253,51 @@ with connection() as con:
   
 meta = MetaData(bind=engine)
 meta.reflect()
-active_substances_t = meta.tables['active_substance']
-ingredients = meta.tables['ingredient']
-medicines = meta.tables['medicine']
+active_substance_t = meta.tables['active_substance']
+form_t = meta.tables['form']
+way_t = meta.tables['way']
+ingredient_t = meta.tables['ingredient']
+medicine_t = meta.tables['medicine']
+
 
 with connection() as con:
-  for as_name, as_id in active_substances.items():
-    query = insert(active_substances_t).values(
-      id=as_id, 
-      name=as_name
-    )
-    con.execute(query)
+  query = active_substance_t.insert().values(list(map(
+    lambda t: dict(id=t[1], name=t[0]),
+    active_substances.items()
+  )))
+  con.execute(query)
+  
+  query = way_t.insert().values(list(map(
+    lambda t: dict(id=t[0], name=t[1]),
+    enumerate(routes_of_administration)
+  )))
+  con.execute(query)
 
-  for group, sub_id in substitute_groups.items():
-    as_id, sub_form, sub_dose = group
-    query = insert(ingredients).values(
-      id=sub_id, 
-      form=forms_d[sub_form], 
-      dose=sub_dose, 
-      active_substance=as_id
-    )
-    con.execute(query)
+  query = form_t.insert().values(list(map(
+    lambda id_v: dict(id=id_v, way=forms_way[id_v], name=final_forms[id_v]),
+    range(len(final_forms))
+  )))
+  con.execute(query)
 
-# data[i] = [as_id, sub_id, name, old_form, dose, quantity, med[4], med[12], med[14], med[15]]
-# id | name | ingredient | quantity | id_code | refund_scope | refund | surcharge
-  for i, med in enumerate(data):
-    query = insert(medicines).values(
-      id=(i + 1), 
-      name=med[2], 
-      ingredient=med[1], 
-      quantity=med[5], 
-      id_code=med[6], 
-      refund_scope=med[7],
-      refund=med[8],
-      surcharge=med[9]
-    )
-    con.execute(query)
+  query = ingredient_t.insert().values(list(map(
+    lambda ingr: dict(id=ingr[1], form=ingr[0][1], dose=ingr[0][2], active_substance=ingr[0][0]),
+    substitute_groups.items()
+  )))
+  con.execute(query)
+
+# data: name, substance(fk), old_form, dose, quantity(r), contents, id_code, refund_scope, refund, surcharge, ingredient(fk)
+  query = medicine_t.insert().values(list(map(
+    lambda med: dict(
+      id=med[0], 
+      name=med[1][0], 
+      ingredient=med[1][10], 
+      quantity=med[1][4], 
+      contents=med[1][5], 
+      id_code=med[1][6], 
+      refund_scope=med[1][7],
+      refund=med[1][8],
+      surcharge=med[1][9]
+    ),
+    enumerate(data)
+  )))
+  con.execute(query)
