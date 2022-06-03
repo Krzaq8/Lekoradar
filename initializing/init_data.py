@@ -80,10 +80,14 @@ def get_quantity(quantity_string):
 
 unhandled_substances = np.loadtxt('unhandled_substances.csv', dtype=str, delimiter=',')
 routes_of_administration = np.loadtxt('routes_of_administration.csv', dtype=str, delimiter=',')
+routes_for_forms = dict(map(lambda record: (record[0], int(record[1])),\
+  np.loadtxt('routes_for_forms.csv', dtype=str, delimiter=';')))
 
 data_frame = pd.read_excel('source_data.xlsx', sheet_name='A1')
 data_frame.to_csv('tmp_data.csv', index = None, header=False, sep='|')
-raw_data = np.loadtxt("tmp_data.csv", skiprows = 1, delimiter = '|', dtype=str)
+raw_data = np.loadtxt('tmp_data.csv', skiprows = 1, delimiter = '|', dtype=str)
+
+# data: name, substance(fk), old_form, dose, quantity(r), contents, id_code, refund_scope, refund, surcharge, ingredient(fk)
 data = []
 
 active_substances = dict()
@@ -132,7 +136,7 @@ def add_form(new_form):
 
 
 # Wydłuża nazwę reprezentującą daną formę.
-# Zwraca najkrótszą nazwę tej formy.
+# Zwraca indeks nazwę tej formy.
 def correct_form(form):
   for regex, root_form in forms:
     if re.fullmatch(regex, form):
@@ -152,7 +156,7 @@ def correct_final_form(form):
   return form\
     .replace('kaps.', 'kapsułki')\
     .replace('dojel.', 'dojelitowe')\
-    .replace('amp.-strzyk..', 'ampułko-strzykawce')\
+    .replace('amp.-strzyk.', 'ampułko-strzykawce')\
     .replace('tabl.', 'tabletki')\
     .replace('powl.', 'powlekane')\
     .replace('przedł.', 'przedłużonym')\
@@ -169,13 +173,12 @@ def add_ingredient(substance, form, dose):
 add_ingredient.counter = 0
 
 
-# Pierwsza iteracja: zbieramy dane.
-# Te których nie trzeba obrabiać od razu wrzucamy, resztę dodajemy do struktur.
+# Pierwsza iteracja: zbieramy dane i dodajemy te które nas interesują do struktur.
 for med in raw_data:
   if med[1] in unhandled_substances:
     continue
 
-  as_id = add_substance(med[1])
+  substance = add_substance(med[1])
 
   name, old_form, dose = separate_name_form_dose(med[2])
 
@@ -185,13 +188,11 @@ for med in raw_data:
 
   quantity = get_quantity(med[3])
   surcharge = get_first_number(med[15])
-
-# todo: data wymaga refactoringu
-  data.append([as_id, 0, name, old_form, dose, quantity, med[4], med[12], med[14], surcharge, 0])
+  data.append([name, substance, old_form, dose, quantity, med[3], med[4], med[12], med[14], surcharge, 0])
 
 
 # Inicjujemy słownik postaci. 
-# Będziemy w nim przechowywać indeks do tablicy z danymi o 
+# Będziemy w nim przechowywać indeks do tablic z najdłuższą postacią i drogą podania.
 for _, form in forms:
   forms_d[form] = len(final_forms)
   final_forms.append(form)
@@ -202,15 +203,20 @@ for _, form in forms:
 # Dla każdej takiej szukamy jej najdłuższego odpowiednika.
 # Ponadto możemy podzielić już na grupy odpowiedników.
 for i in range(len(data)):
-  form = correct_form(data[i][3])
-  as_id = data[i][0]
-  dose = data[i][4]
+  form = correct_form(data[i][2])
+  substance = data[i][1]
+  dose = data[i][3]
 
-  data[i][1] = add_ingredient(as_id, form, dose)
-
-
+  data[i][10] = add_ingredient(substance, form, dose)
 
 
+# Uzupełniamy dane o konkretnych postaciach, czyli rozwijamy ewentualne skróty w formie i dopasowujemy drogę podania.
+for (id, form) in enumerate(final_forms):
+  final_forms[id] = correct_final_form(form)
+  forms_way[id] = routes_for_forms[final_forms[id]]
+
+
+# Funkcja robiąca śmietnik w folderze initializing.
 def more_stats():
   global names_s
   global forms_d
@@ -218,7 +224,7 @@ def more_stats():
   global doses_s
   names = list(names_s)
   names.sort()
-  forms_l = list(map(lambda form: forms_d[form[1]], forms))
+  forms_l = list(final_forms)
   forms_l.sort()
   doses = list(doses_s)
   doses.sort()
