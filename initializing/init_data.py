@@ -35,7 +35,11 @@ def normal_quantity_form(quantity):
 
 # Wyłuskuje pierwszą znalezioną liczbę rzeczywistą w tekscie.
 def get_first_number(text):
-  return float(list(re.findall(r'\d+[.,]?\d*', text))[0].replace(',', '.'))
+  numbers = list(re.findall(r'\d+[.,]?\d*', text))
+  if len(numbers) == 0:
+    return 1.0
+  else:
+    return float(numbers[0].replace(',', '.'))
 
 
 # Zamienia w tekście przecinki oddzielające liczby na kropki.
@@ -67,38 +71,43 @@ def separate_name_form_dose(text):
 def get_quantity(quantity_string):
   parts = normal_quantity_form(quantity_string).split(' ')
   if len(parts) >= 3 and parts[1] == 'X':
+    if parts[2] == 'proszku':
+      print(quantity_string)
     return float(parts[0]) * get_first_number(parts[2])
   else:
     return get_first_number(quantity_string)
 
 
-# Poprawia tekst postaci, w której pozostały błędy po automatycznej obróbce.
-def correct_final_form(form):
-  return form\
-    .replace('kaps.', 'kapsułki')\
-    .replace('dojel.', 'dojelitowe')\
-    .replace('amp.-strzyk..', 'ampułko-strzykawce')\
-    .replace('tabl.', 'tabletki')\
-    .replace('powl.', 'powlekane')\
-    .replace('przedł.', 'przedłużonym')\
-    .replace('kapsułce twardej', 'kapsułkach twardych')
-
+unhandled_substances = np.loadtxt('unhandled_substances.csv', dtype=str, delimiter=',')
+routes_of_administration = np.loadtxt('routes_of_administration.csv', dtype=str, delimiter=',')
 
 data_frame = pd.read_excel('source_data.xlsx', sheet_name='A1')
 data_frame.to_csv('tmp_data.csv', index = None, header=False, sep='|')
-
 raw_data = np.loadtxt("tmp_data.csv", skiprows = 1, delimiter = '|', dtype=str)
-data = [[] for _ in range(len(raw_data))]
+data = []
 
 active_substances = dict()
 active_substances_r = dict()
 substitute_groups = dict()
-k = 0
-l = 0
 names_s = set()
 doses_s = set()
 forms = list()
 forms_d = dict()
+final_forms = list()
+forms_way = list()
+
+
+# Dodaje substancję do zbioru. Zwraca jej id.
+def add_substance(substance):
+  global active_substances
+
+  if substance not in active_substances:
+    add_substance.counter += 1
+    active_substances[substance] = add_substance.counter
+    active_substances_r[add_substance.counter] = substance
+  return active_substances[substance]
+
+add_substance.counter = 0
 
 
 # Dodaje nową postać do zbioru.
@@ -120,66 +129,86 @@ def add_form(new_form):
     forms = list(filter(lambda form: not re.fullmatch(new_regex, form[1]), forms))
 
   forms.append((new_regex, new_form))
-  return new_form
 
 
-# Dodaje substancję do zbioru. Zwraca jej id.
-def add_substance(substance):
-  global active_substances
+# Wydłuża nazwę reprezentującą daną formę.
+# Zwraca najkrótszą nazwę tej formy.
+def correct_form(form):
+  for regex, root_form in forms:
+    if re.fullmatch(regex, form):
+      form_id = forms_d[root_form]
+      old_form = final_forms[form_id]
 
-  if substance not in active_substances:
-    add_substance.counter += 1
-    active_substances[substance] = add_substance.counter
-    active_substances_r[add_substance.counter] = substance
-  return active_substances[substance]
+      if len(old_form) < len(form):
+        final_forms[form_id] = form
+      elif len(old_form) == len(form) and old_form[-1] == 'a':
+        final_forms[form_id] = form
 
-add_substance.counter = 0
+      return form_id
+
+
+# Poprawia tekst postaci, w której pozostały błędy po automatycznej obróbce.
+def correct_final_form(form):
+  return form\
+    .replace('kaps.', 'kapsułki')\
+    .replace('dojel.', 'dojelitowe')\
+    .replace('amp.-strzyk..', 'ampułko-strzykawce')\
+    .replace('tabl.', 'tabletki')\
+    .replace('powl.', 'powlekane')\
+    .replace('przedł.', 'przedłużonym')\
+    .replace('kapsułce twardej', 'kapsułkach twardych')
+
+
+# Rejestruje grupę odpowiedników. Zwraca id grupy.
+def add_ingredient(substance, form, dose):
+  if (substance, form, dose) not in substitute_groups:
+    add_ingredient.counter += 1
+    substitute_groups[(substance, form, dose)] = add_ingredient.counter
+  return substitute_groups[(substance, form, dose)]
+
+add_ingredient.counter = 0
 
 
 # Pierwsza iteracja: zbieramy dane.
 # Te których nie trzeba obrabiać od razu wrzucamy, resztę dodajemy do struktur.
-
-for (i, med) in enumerate(raw_data):
-  name, old_form, dose = separate_name_form_dose(med[2])
-
-  form = add_form(old_form)
+for med in raw_data:
+  if med[1] in unhandled_substances:
+    continue
 
   as_id = add_substance(med[1])
+
+  name, old_form, dose = separate_name_form_dose(med[2])
+
+  names_s.add(name)
+  doses_s.add(dose)
+  add_form(old_form)
 
   quantity = get_quantity(med[3])
   surcharge = get_first_number(med[15])
 
-  data[i] = [as_id, 0, name, old_form, dose, quantity, med[4], med[12], med[14], surcharge, form]
-  names_s.add(name)
-  doses_s.add(dose)
+# todo: data wymaga refactoringu
+  data.append([as_id, 0, name, old_form, dose, quantity, med[4], med[12], med[14], surcharge, 0])
+
+
+# Inicjujemy słownik postaci. 
+# Będziemy w nim przechowywać indeks do tablicy z danymi o 
+for _, form in forms:
+  forms_d[form] = len(final_forms)
+  final_forms.append(form)
+  forms_way.append('')
 
 
 # W drugiej iteracji znamy już najkrótsze napisy postaci.
 # Dla każdej takiej szukamy jej najdłuższego odpowiednika.
 # Ponadto możemy podzielić już na grupy odpowiedników.
-
-
 for i in range(len(data)):
-  current_form = data[i][3]
-  root_form = data[i][10]
-  
-  if root_form not in forms_d:
-    forms_d[root_form] = current_form
-  else:
-    old_form = forms_d[root_form]
-    if len(old_form) < len(current_form):
-      forms_d[root_form] = current_form
-    elif len(old_form) == len(current_form) and old_form[-1] == 'a':
-      forms_d[root_form] = current_form
-
+  form = correct_form(data[i][3])
   as_id = data[i][0]
   dose = data[i][4]
-  if (as_id, root_form, dose) not in substitute_groups:
-    l += 1
-    substitute_groups[(as_id, root_form, dose)] = l
-  sub_id = substitute_groups[(as_id, root_form, dose)]
 
-  data[i][1] = sub_id
+  data[i][1] = add_ingredient(as_id, form, dose)
+
+
 
 
 def more_stats():
