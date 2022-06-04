@@ -75,8 +75,6 @@ def separate_name_form_dose(text):
 def get_quantity(quantity_string):
   parts = normal_quantity_form(quantity_string).split(' ')
   if len(parts) >= 3 and parts[1] == 'X':
-    if parts[2] == 'proszku':
-      print(quantity_string)
     return float(parts[0]) * get_first_number(parts[2])
   else:
     return get_first_number(quantity_string)
@@ -237,7 +235,7 @@ def more_stats():
   pd.DataFrame(forms_l, columns=['form']).to_csv('forms.csv')
   pd.DataFrame(doses, columns=['dose']).to_csv('doses.csv') 
 
-more_stats()
+# more_stats()
 
 
 # Poniżej łączymy się z bazą danych i inicjujemy tabele i dane początkowe.
