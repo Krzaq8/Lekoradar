@@ -4,7 +4,7 @@ from database.connection import connection, engine
 from sqlalchemy import MetaData, select
 
 
-result_heading = ['Numer grupy', 'Nazwa', 'Postać', 'Droga podania', 'Dawka', 'Zawartość opakowania', 
+result_heading = ['Numer grupy', 'Nazwa', 'Postać', 'Droga podania', 'Dawka', 'Zawartość opakowania', 'ilość',
   'Numer GTIN lub inny kod jednoznacznie identyfikujący produkt', 'Zakres wskazań objętych refundacją',
   'Poziom odpłatności', 'Wysokość dopłaty świadczeniobiorcy', 'Opłacalność']
 
@@ -29,6 +29,7 @@ def get_result_table(substance):
       W.c.name, 
       I.c.dose,
       M.c.contents,
+      M.c.quantity,
       M.c.id_code,
       M.c.refund_scope,
       M.c.refund,
