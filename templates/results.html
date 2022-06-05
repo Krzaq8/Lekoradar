@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Wyniki dla {{request.args.get('sub')}}{% endblock %}
+{% block title %}Wyniki dla {{sub_name}} {% endblock %}
 {% block content %}
 <style>
     table {
@@ -13,9 +13,9 @@
 <h5> Wyniki dla {{sub_name}} </h5>
 <p>
 
-
 <table>
     {% for row in table %}
+        {% set outer_loop = loop %}
         {% if loop.index == 1 %}
             <tr style="background-color: #2874a6;color:white;">
             {% for el in row %}
@@ -25,7 +25,14 @@
         {% else %}
             <tr>
             {% for el in row %}
-                <td> {{el}} </td>
+                {% if loop.index == 1 %}
+                    {% if outer_loop.index in res_dict.keys() %}
+                        <td rowspan={{res_dict[outer_loop.index]}}> {{el}}  </td>
+                    {% else %}
+                    {% endif %}
+                {% else %}
+                    <td> {{el}} </td>
+                {% endif %}
             {% endfor %}
             </tr>
         {% endif %}
@@ -34,7 +41,7 @@
 
 <br>
 
-<a href="{{ url_for('home') }}"> Powrót do wyszukiwania </a>
+<a href="{{ url_for('home') }}" class="button"> Powrót do wyszukiwania </a>
 </p>
 
 {% endblock %}
