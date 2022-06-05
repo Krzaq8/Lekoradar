@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Nie znaleziono strony {% endblock %}
+{% block content %}
+<h5>Strona o podanym adresie nie istnieje</h5>
+<br>
+<p>
+    <a href="{{ url_for('home') }}"> Powrót do wyszukiwania </a>
+
+</p>
+
+{% endblock %}
