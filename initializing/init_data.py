@@ -9,24 +9,26 @@ sys.path.append('../')
 # Sprowadza tekst zawartości do prostszej formy. 
 # Zamienia słowa kluczowe na 'X' jeśli wartości po obu stronach 'X' mają być przemnożone.
 def normal_quantity_form(quantity):
-  quantity = quantity.replace('(', '').replace(')', '')
+  quantity = quantity.replace('(', '').replace(')', '').replace(' SoloStar po', '')
   quantity = quantity.replace('. a', '.').replace('.a', '.').replace('. po', '.').replace('.po', '.')
   quantity = quantity\
     .replace('but.', 'X')\
     .replace('amp.', 'X')\
-    .replace('butelka', 'X')\
     .replace('butelka po', 'X')\
-    .replace('butelki', 'X')\
+    .replace('butelka', 'X')\
     .replace('butelki po', 'X')\
+    .replace('butelki', 'X')\
     .replace('x', 'X')\
-    .replace('bliser', 'X')\
+    .replace('blister', 'X')\
     .replace('fiol.', 'X')\
     .replace('inh.', 'X')\
     .replace('inhalator', 'X')\
+    .replace('tuba po', 'X')\
     .replace('tuba', 'X')\
     .replace('poj.', 'X')\
+    .replace('wkł.', 'X')\
+    .replace('wkladów po', 'X')\
     .replace('wstrzyk.', 'X')\
-    .replace('wstrz. SoloStar po', 'X')\
     .replace('wstrz.', 'X')\
     .replace('wstrzykiwaczy', 'X')\
     .replace('worek po', 'X')
