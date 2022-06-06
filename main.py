@@ -19,25 +19,17 @@ def results():
     
     sub_id = request.args.get('sub')
 
-    if not sub_id.isdecimal() or int(sub_id) > sub_num:
+    if not sub_id.isdecimal() or int(sub_id) >= sub_num:
         return render_template('error.html') 
     
-    if request.method == 'POST':
-        route = request.form['route']
-        if route == 'wszystkie':
-            result_table = get_result_table(sub_id)
-        else:
-            result_table = get_result_table(sub_id, route)    
-    else:
-        result_table = get_result_table(sub_id)
-    
-    routes = [pair[1] for pair in get_routes_for_substance(sub_id)]
-    routes.append('wszystkie')
+    route = int(request.form.get('route', -1))
+    result_table = get_result_table(sub_id, route)
+
     round_up_data(result_table)
     sub_name = get_substance_name(sub_id)
     res_dict_id = get_cell_merge_dict(result_table, 0)
     return render_template("results.html", table=result_table, sub_name=sub_name,
-        res_dict_id=res_dict_id, routes=routes)
+        res_dict_id=res_dict_id, routes=get_routes_for_substance(sub_id))
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')

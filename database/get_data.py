@@ -4,7 +4,7 @@ from database.connection import connection, engine
 from sqlalchemy import MetaData, select
 
 
-result_heading = ['Numer grupy', 'Nazwa', 'Postać', 'Droga podania', 'Dawka', 'Zawartość opakowania',
+result_heading = ['Numer grupy', 'Postać', 'Droga podania', 'Dawka', 'Nazwa', 'Zawartość opakowania',
   'Numer GTIN lub inny kod jednoznacznie identyfikujący produkt', 'Zakres wskazań objętych refundacją',
   'Poziom odpłatności', 'Wysokość dopłaty świadczeniobiorcy', 'Opłacalność']
 
@@ -20,14 +20,14 @@ M = meta.tables['medicine']
 # Przygotowuje tabelę wynikową dla substancji o id = substance.
 # Wysyła zapytanie do bazy danych skąd pobiera dane o lekach z daną substancją aktywną.
 # Dodaje nagłówek tabeli z nazwami kolumn.
-def get_result_table(substance, route=None):
+def get_result_table(substance, route=-1):
   query = \
     select(
       I.c.id, 
-      M.c.name, 
       F.c.name, 
       W.c.name, 
       I.c.dose,
+      M.c.name, 
       M.c.contents,
       M.c.id_code,
       M.c.refund_scope,
@@ -44,8 +44,8 @@ def get_result_table(substance, route=None):
       I.c.id,
       M.c.surcharge / M.c.quantity)
 
-  if route != None:
-    query = query.where(W.c.name == route)
+  if route != -1:
+    query = query.where(W.c.id == route)
 
   data = []
   with connection() as con:
@@ -89,4 +89,4 @@ def get_routes_for_substance(id):
       W.c.id == F.c.way,
       F.c.id == I.c.form,
       I.c.active_substance == id)
-    return con.execute(query).fetchall()
+    return [(-1, 'wszystkie')] + con.execute(query).fetchall()

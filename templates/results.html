@@ -15,8 +15,8 @@
 <p>
     <form action="{{ url_for('results', sub=request.args.get('sub')) }}" method="post">
         <p><select name="route" id="route"></p>
-        {% for route in routes %}
-            <option value="{{route}}"> {{route}} </option>
+        {% for id, route in routes %}
+            <option value='{{id}}'> {{route}} </option>
         {% endfor %}
         </select>
         <button type="submit">wybierz</button>
@@ -36,7 +36,7 @@
         {% else %}
             <tr>
             {% for el in row %}
-                {% if loop.index == 1 or loop.index == 3 or loop.index == 4 or loop.index == 5 %}
+                {% if loop.index < 5 %}
                     {% if outer_loop.index in res_dict_id.keys() %}
                         <td rowspan={{res_dict_id[outer_loop.index]}}> {{el}}  </td>
                     {% endif %}

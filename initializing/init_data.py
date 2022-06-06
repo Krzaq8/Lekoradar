@@ -110,9 +110,9 @@ def add_substance(substance):
   global active_substances
 
   if substance not in active_substances:
-    add_substance.counter += 1
     active_substances[substance] = add_substance.counter
     active_substances_r[add_substance.counter] = substance
+    add_substance.counter += 1
   return active_substances[substance]
 
 add_substance.counter = 0
@@ -171,8 +171,8 @@ def correct_final_form(form):
 # Rejestruje grupę odpowiedników. Zwraca id grupy.
 def add_ingredient(substance, form, dose):
   if (substance, form, dose) not in substitute_groups:
-    add_ingredient.counter += 1
     substitute_groups[(substance, form, dose)] = add_ingredient.counter
+    add_ingredient.counter += 1
   return substitute_groups[(substance, form, dose)]
 
 add_ingredient.counter = 0
