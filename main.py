@@ -16,20 +16,20 @@ def home():
 
 @app.route("/results", methods=('GET', 'POST'))
 def results():
-    
-    sub_id = request.args.get('sub')
+    try:
+        sub_id = request.args.get('sub')
+        
+        route = int(request.form.get('route', -1))
+        result_table = get_result_table(sub_id, route)
 
-    if not sub_id.isdecimal() or int(sub_id) >= sub_num:
+        round_up_data(result_table)
+        sub_name = get_substance_name(sub_id)
+        res_dict_id = get_cell_merge_dict(result_table, 0)
+        return render_template("results.html", table=result_table, sub_name=sub_name,
+            res_dict_id=res_dict_id, routes=get_routes_for_substance(sub_id))
+    except:
         return render_template('error.html') 
-    
-    route = int(request.form.get('route', -1))
-    result_table = get_result_table(sub_id, route)
 
-    round_up_data(result_table)
-    sub_name = get_substance_name(sub_id)
-    res_dict_id = get_cell_merge_dict(result_table, 0)
-    return render_template("results.html", table=result_table, sub_name=sub_name,
-        res_dict_id=res_dict_id, routes=get_routes_for_substance(sub_id))
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
