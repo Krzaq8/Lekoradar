@@ -11,8 +11,19 @@
 </style>
 
 <h5> Wyniki dla {{sub_name}} </h5>
-<p>
 
+<p>
+    <form action="{{ url_for('results', sub=request.args.get('sub')) }}" method="post">
+        <p><select name="route" id="route"></p>
+        {% for route in routes %}
+            <option value="{{route}}"> {{route}} </option>
+        {% endfor %}
+        </select>
+        <button type="submit">wybierz</button>
+    </form>    
+</p>
+
+<p>
 <table>
     {% for row in table %}
         {% set outer_loop = loop %}

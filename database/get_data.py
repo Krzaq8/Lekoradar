@@ -45,7 +45,7 @@ def get_result_table(substance, route=None):
       M.c.surcharge / M.c.quantity)
 
   if route != None:
-    query = query.where(W.c.id == route)
+    query = query.where(W.c.name == route)
 
   data = []
   with connection() as con:
