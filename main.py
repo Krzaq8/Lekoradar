@@ -1,11 +1,13 @@
 from flask import Flask, render_template, request
 from flask_bootstrap import Bootstrap
-from database.get_data import get_substance_name, get_substance_table, get_result_table
+from database.get_data import get_routes_for_substance, get_substance_name, get_substance_table, get_result_table
 import csv
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "2b3f12f3ef12a6c86b"
 Bootstrap(app)
+
+sub_num = len(get_substance_table())
 
 @app.route("/")
 def home():
@@ -14,19 +16,28 @@ def home():
 
 @app.route("/results", methods=('GET', 'POST'))
 def results():
+    
     sub_id = request.args.get('sub')
+
+    if not sub_id.isdecimal() or int(sub_id) > sub_num:
+        return render_template('error.html') 
     
     if request.method == 'POST':
         route = request.form['route']
-        result_table = get_result_table(sub_id, route)    
+        if route == 'wszystkie':
+            result_table = get_result_table(sub_id)
+        else:
+            result_table = get_result_table(sub_id, route)    
     else:
         result_table = get_result_table(sub_id)
     
+    routes = [pair[1] for pair in get_routes_for_substance(sub_id)]
+    routes.append('wszystkie')
     round_up_data(result_table)
     sub_name = get_substance_name(sub_id)
     res_dict_id = get_cell_merge_dict(result_table, 0)
     return render_template("results.html", table=result_table, sub_name=sub_name,
-        res_dict_id=res_dict_id, routes=get_routes())
+        res_dict_id=res_dict_id, routes=routes)
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
@@ -57,9 +68,6 @@ def round_up_data(result_table):
         result_table[i][-1] = '{:.2f}'.format(result_table[i][-1])
         result_table[i][-2] = '{:.2f}'.format(result_table[i][-2])
 
-def get_routes():
-    with open('./initializing/routes_of_administration.csv', newline='') as route_file:
-        return [route[0] for route in csv.reader(route_file) if len(route) > 0] 
 
 
 if __name__ == "__main__":
