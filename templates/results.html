@@ -22,24 +22,12 @@
                 <td> {{el}} </td>
             {% endfor %}
             </tr>
-        {% else %} res_dict_route
+        {% else %}
             <tr>
             {% for el in row %}
-                {% if loop.index == 1 %}
+                {% if loop.index == 1 or loop.index == 3 or loop.index == 4 or loop.index == 5 %}
                     {% if outer_loop.index in res_dict_id.keys() %}
                         <td rowspan={{res_dict_id[outer_loop.index]}}> {{el}}  </td>
-                    {% endif %}
-                {% elif loop.index == 3 %}
-                    {% if outer_loop.index in res_dict_form.keys() %}
-                        <td rowspan={{res_dict_form[outer_loop.index]}}> {{el}}  </td>
-                    {% endif %}
-                {% elif loop.index == 4 %}
-                    {% if outer_loop.index in res_dict_route.keys() %}
-                        <td rowspan={{res_dict_route[outer_loop.index]}}> {{el}}  </td>
-                    {% endif %}
-                {% elif loop.index == 5 %}
-                    {% if outer_loop.index in res_dict_dose.keys() %}
-                        <td rowspan={{res_dict_dose[outer_loop.index]}}> {{el}}  </td>
                     {% endif %}
                 {% else %}
                     <td> {{el}} </td>
